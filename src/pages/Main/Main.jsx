@@ -3,13 +3,12 @@ import styled from "styled-components";
 import Modal from "../../components/common/modal/Modal";
 import OptionSelector from "../../components/common/modal/OptionSelector";
 import dropdownIcon from "../../assets/icons/dropdown_icon.svg"
-import sortingIcon from "../../assets/icons/sorting_icon.svg"
 import product1 from "../../assets/images/product1.png"
 import product2 from "../../assets/images/product2.png"
 import product3 from "../../assets/images/product3.png"
 import product4 from "../../assets/images/product4.png"
 import product5 from "../../assets/images/product5.png"
-import { useLocation, useNavigate } from "react-router-dom";
+import SortDropdown from "../../components/common/SortDropdown";
 
 const Container = styled.div`
   width: 1440px;
@@ -137,21 +136,11 @@ const ProductItem = ({ img, name, price, review }) => (
 );
 
 export default function Main() {
-  const { pathname } = useLocation();
-  const navigate = useNavigate();
-
-  const [activeModal, setActiveModal] = useState(null); // 현재 열린 모달 이름
-
-  // 모든 필터 상태를 하나의 객체로 관리
+  const [activeModal, setActiveModal] = useState(null);
   const [filters, setFilters] = useState({
-    성별: "",
-    색상: "",
-    사이즈: "",
-    가격대: "",
-    종류: ""
+    성별: "", 색상: "", 사이즈: "", 가격대: "", 종류: ""
   });
 
-  // 각 카테고리별 옵션 데이터
   const filterData = {
     성별: ["female", "male", "unisex"],
     색상: [
@@ -197,12 +186,7 @@ export default function Main() {
           ))}
         </CategoryGroup>
 
-        {pathname === "/" && (
-          <SortButton onClick={() => navigate("/add")}>
-            <span>정렬순</span>
-            <IconImage src={sortingIcon} alt="sorting" />
-          </SortButton>
-        )}
+        <SortDropdown />
       </TopBar>
 
       {activeModal && (
