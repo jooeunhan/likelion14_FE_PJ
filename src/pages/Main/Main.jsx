@@ -1,4 +1,7 @@
+import { useState } from "react";
 import styled from "styled-components";
+import Modal from "../../components/common/modal/Modal";
+import OptionSelector from "../../components/common/modal/OptionSelector";
 import dropdownIcon from "../../assets/icons/dropdown_icon.svg"
 import sortingIcon from "../../assets/icons/sorting_icon.svg"
 import product1 from "../../assets/images/product1.png"
@@ -63,7 +66,6 @@ const CategoryGroup = styled.div`
 const IconImage = styled.img`
   width: 10px;
   height: 11px;
-  margin-left: 4px;
 `;
 
 const ProductGrid = styled.div`
@@ -137,7 +139,38 @@ const ProductItem = ({ img, name, price, review }) => (
 export default function Main() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const categories = ["성별", "색상", "사이즈", "가격대", "종류"];
+
+  const [activeModal, setActiveModal] = useState(null); // 현재 열린 모달 이름
+
+  // 모든 필터 상태를 하나의 객체로 관리
+  const [filters, setFilters] = useState({
+    성별: "",
+    색상: "",
+    사이즈: "",
+    가격대: "",
+    종류: ""
+  });
+
+  // 각 카테고리별 옵션 데이터
+  const filterData = {
+    성별: ["female", "male", "unisex"],
+    색상: [
+      ["red", "pink", "blue"],
+      ["black", "gray", "denim"],
+      ["rainbow", "multi", "holographic"]
+    ],
+    사이즈: [
+      ["9", "10"],
+      ["S", "M", "L", "XL"]
+    ],
+    가격대: ["0~30$", "31~60$", "61~90$"],
+    종류: ["clothes", "shoes"]
+  };
+
+  const handleSelect = (category, value) => {
+    setFilters(prev => ({ ...prev, [category]: value }));
+    setActiveModal(null);
+  };
 
   const productList = [
     { id: 1, img: product1, name: "아이앱 스튜디오 25 후드 라이트 그레이", price: "145,000원", review: "1,561" },
@@ -155,17 +188,15 @@ export default function Main() {
   return (
     <Container>
       <TopBar>
-        {/* 상속받은 CategoryButton 사용 */}
         <CategoryGroup>
-          {categories.map((category) => (
-            <CategoryButton key={category}>
-              {category}
+          {Object.keys(filterData).map((category) => (
+            <CategoryButton key={category} onClick={() => setActiveModal(category)}>
+              {filters[category] ? filters[category] : category}
               <IconImage src={dropdownIcon} alt="dropdown" />
             </CategoryButton>
           ))}
         </CategoryGroup>
 
-        {/* 상속받은 SortButton 사용 */}
         {pathname === "/" && (
           <SortButton onClick={() => navigate("/add")}>
             <span>정렬순</span>
@@ -173,6 +204,16 @@ export default function Main() {
           </SortButton>
         )}
       </TopBar>
+
+      {activeModal && (
+        <Modal title={activeModal} onClose={() => setActiveModal(null)}>
+          <OptionSelector
+            options={filterData[activeModal]}
+            selectedValue={filters[activeModal]}
+            onSelect={(val) => handleSelect(activeModal, val)}
+          />
+        </Modal>
+      )}
 
       <ProductGrid>
         {productList.map((product) => (
