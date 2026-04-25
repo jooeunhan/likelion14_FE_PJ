@@ -1,17 +1,69 @@
 import styled from "styled-components";
-import product1 from "../../assets/images/product1.png";
-import product2 from "../../assets/images/product2.png";
-import product3 from "../../assets/images/product3.png";
-import product4 from "../../assets/images/product4.png";
-import product5 from "../../assets/images/product5.png";
+import dropdownIcon from "../../assets/icons/dropdown_icon.svg"
+import sortingIcon from "../../assets/icons/sorting_icon.svg"
+import product1 from "../../assets/images/product1.png"
+import product2 from "../../assets/images/product2.png"
+import product3 from "../../assets/images/product3.png"
+import product4 from "../../assets/images/product4.png"
+import product5 from "../../assets/images/product5.png"
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   width: 1440px;
   margin: 0 auto;
-  position: relative;
   padding-left: 158px;
   padding-right: 149px; 
   box-sizing: border-box;
+`;
+
+const BaseButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Pretendard';
+  font-size: 13px;
+  color: #616161;
+  display: flex;
+  align-items: center;
+  font-weight: 400;
+  padding: 0;
+`;
+
+const CategoryButton = styled(BaseButton)`
+  background-color: #f2f2f2;
+  border-radius: 20px;
+  padding: 8px 11px 11px 10px;
+  gap: 4px;
+
+  &:hover {
+    background-color: #e0e0e0;
+  }
+`;
+
+const SortButton = styled(BaseButton)`
+  padding-right: 34px;
+  padding-top: 55px;
+  gap: 7px;
+`;
+
+const TopBar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 22px;
+  margin-bottom: 35px;
+  margin-left: -5px;
+`;
+
+const CategoryGroup = styled.div`
+  display: flex;
+  gap: 8px;
+`;
+
+const IconImage = styled.img`
+  width: 10px;
+  height: 11px;
+  margin-left: 4px;
 `;
 
 const ProductGrid = styled.div`
@@ -83,6 +135,10 @@ const ProductItem = ({ img, name, price, review }) => (
 );
 
 export default function Main() {
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const categories = ["성별", "색상", "사이즈", "가격대", "종류"];
+
   const productList = [
     { id: 1, img: product1, name: "아이앱 스튜디오 25 후드 라이트 그레이", price: "145,000원", review: "1,561" },
     { id: 2, img: product2, name: "아이앱 스튜디오 25 후드 라이트 블루", price: "145,000원", review: "1,732" },
@@ -98,9 +154,29 @@ export default function Main() {
 
   return (
     <Container>
+      <TopBar>
+        {/* 상속받은 CategoryButton 사용 */}
+        <CategoryGroup>
+          {categories.map((category) => (
+            <CategoryButton key={category}>
+              {category}
+              <IconImage src={dropdownIcon} alt="dropdown" />
+            </CategoryButton>
+          ))}
+        </CategoryGroup>
+
+        {/* 상속받은 SortButton 사용 */}
+        {pathname === "/" && (
+          <SortButton onClick={() => navigate("/add")}>
+            <span>정렬순</span>
+            <IconImage src={sortingIcon} alt="sorting" />
+          </SortButton>
+        )}
+      </TopBar>
+
       <ProductGrid>
         {productList.map((product) => (
-          <ProductItem 
+          <ProductItem
             key={product.id}
             img={product.img}
             name={product.name}
