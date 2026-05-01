@@ -1,20 +1,19 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+
 import Modal from "../../components/common/modal/Modal";
 import OptionSelector from "../../components/common/modal/OptionSelector";
-import dropdownIcon from "../../assets/icons/dropdown_icon.svg"
-import product1 from "../../assets/images/product1.png"
-import product2 from "../../assets/images/product2.png"
-import product3 from "../../assets/images/product3.png"
-import product4 from "../../assets/images/product4.png"
-import product5 from "../../assets/images/product5.png"
 import SortDropdown from "../../components/common/SortDropdown";
+
+import productDummy from "./productDummy.js";
+import dropdownIcon from "../../assets/icons/dropdown_icon.svg";
 
 const Container = styled.div`
   width: 1440px;
   margin: 0 auto;
   padding-left: 158px;
-  padding-right: 149px; 
+  padding-right: 149px;
   box-sizing: border-box;
 `;
 
@@ -42,12 +41,6 @@ const CategoryButton = styled(BaseButton)`
   }
 `;
 
-const SortButton = styled(BaseButton)`
-  padding-right: 34px;
-  padding-top: 55px;
-  gap: 7px;
-`;
-
 const TopBar = styled.div`
   display: flex;
   justify-content: space-between;
@@ -70,10 +63,10 @@ const IconImage = styled.img`
 const ProductGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 181px);
-  column-gap: 57px; 
+  column-gap: 57px;
   row-gap: 35px;
   margin-top: 20px;
-  justify-content: start; 
+  justify-content: start;
 `;
 
 const Card = styled.div`
@@ -122,23 +115,33 @@ const Reviews = styled.div`
   font-size: 11px;
 `;
 
-const ProductItem = ({ img, name, price, review }) => (
-  <Card>
-    <ImageWrapper>
-      <ProductImage src={img} alt={name} />
-    </ImageWrapper>
-    <InfoBox>
-      <ProductName>{name}</ProductName>
-      <Cost>{price}</Cost>
-      <Reviews>리뷰 {review}</Reviews>
-    </InfoBox>
-  </Card>
-);
+const ProductItem = ({ itemId, img, name, price, review }) => {
+  const navigate = useNavigate();
+
+  return (
+    <Card onClick={() => navigate(`/item/${itemId}`)}>
+      <ImageWrapper>
+        <ProductImage src={img} alt={name} />
+      </ImageWrapper>
+
+      <InfoBox>
+        <ProductName>{name}</ProductName>
+        <Cost>{price}</Cost>
+        <Reviews>리뷰 {review}</Reviews>
+      </InfoBox>
+    </Card>
+  );
+};
 
 export default function Main() {
   const [activeModal, setActiveModal] = useState(null);
+
   const [filters, setFilters] = useState({
-    성별: "", 색상: "", 사이즈: "", 가격대: "", 종류: ""
+    성별: "",
+    색상: "",
+    사이즈: "",
+    가격대: "",
+    종류: "",
   });
 
   const filterData = {
@@ -146,40 +149,30 @@ export default function Main() {
     색상: [
       ["red", "pink", "blue"],
       ["black", "gray", "denim"],
-      ["rainbow", "multi", "holographic"]
+      ["rainbow", "multi", "holographic"],
     ],
     사이즈: [
       ["9", "10"],
-      ["S", "M", "L", "XL"]
+      ["S", "M", "L", "XL"],
     ],
     가격대: ["0~30$", "31~60$", "61~90$"],
-    종류: ["clothes", "shoes"]
+    종류: ["clothes", "shoes"],
   };
 
   const handleSelect = (category, value) => {
-    setFilters(prev => ({ ...prev, [category]: value }));
+    setFilters((prev) => ({ ...prev, [category]: value }));
     setActiveModal(null);
   };
-
-  const productList = [
-    { id: 1, img: product1, name: "아이앱 스튜디오 25 후드 라이트 그레이", price: "145,000원", review: "1,561" },
-    { id: 2, img: product2, name: "아이앱 스튜디오 25 후드 라이트 블루", price: "145,000원", review: "1,732" },
-    { id: 3, img: product3, name: "아디다스 블랙 져지 2016", price: "255,000원", review: "781" },
-    { id: 4, img: product4, name: "슈프림 후드집업 30 딥블루", price: "458,000원", review: "2,567" },
-    { id: 5, img: product5, name: "나이키 에어 그레이 하운드 25", price: "235,000원", review: "231" },
-    { id: 6, img: product1, name: "아이앱 스튜디오 25 후드 라이트 그레이", price: "145,000원", review: "1,561" },
-    { id: 7, img: product2, name: "아이앱 스튜디오 25 후드 라이트 블루", price: "145,000원", review: "1,732" },
-    { id: 8, img: product3, name: "아디다스 블랙 져지 2016", price: "255,000원", review: "781" },
-    { id: 9, img: product4, name: "슈프림 후드집업 30 딥블루", price: "458,000원", review: "2,567" },
-    { id: 10, img: product5, name: "나이키 에어 그레이 하운드 25", price: "235,000원", review: "231" },
-  ];
 
   return (
     <Container>
       <TopBar>
         <CategoryGroup>
           {Object.keys(filterData).map((category) => (
-            <CategoryButton key={category} onClick={() => setActiveModal(category)}>
+            <CategoryButton
+              itemId={category}
+              onClick={() => setActiveModal(category)}
+            >
               {filters[category] ? filters[category] : category}
               <IconImage src={dropdownIcon} alt="dropdown" />
             </CategoryButton>
@@ -200,9 +193,9 @@ export default function Main() {
       )}
 
       <ProductGrid>
-        {productList.map((product) => (
+        {productDummy.map((product) => (
           <ProductItem
-            key={product.id}
+            itemId={product.id}
             img={product.img}
             name={product.name}
             price={product.price}
