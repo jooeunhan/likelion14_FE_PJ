@@ -195,6 +195,7 @@ export default function Main() {
       <ProductGrid>
         {productDummy.map((product) => (
           <ProductItem
+            key={product.id}
             itemId={product.id}
             img={product.img}
             name={product.name}
