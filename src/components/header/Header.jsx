@@ -31,6 +31,12 @@ const Button = styled.div`
   cursor: pointer;
 `;
 
+const ButtonGroup = styled.div`
+  display: flex;
+  gap: 28px;
+  margin-top: 9px;
+`;
+
 const HeaderRight = styled.div`
   flex-direction: column;
   justify-content: flex-start;
@@ -43,7 +49,7 @@ export default function Header() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
-  const buttonName = "상품등록";
+  const isDetailPage = pathname.startsWith("/item/");
 
   return (
     <div>
@@ -55,13 +61,17 @@ export default function Header() {
         />
 
         <HeaderRight>
-          {pathname === "/" && (
-            <Button onClick={() => navigate("/add")}>
-              {buttonName}
-            </Button>
-          )}
+          {isDetailPage ? (
+          <ButtonGroup>
+            <Button onClick={() => navigate("/add")}>상품등록</Button>
+            <Button>상품삭제</Button>
+            <Button>상품수정</Button>
+          </ButtonGroup>
+        ) : (
+          <Button onClick={() => navigate("/add")}>상품등록</Button>
+        )}
 
-          <HomeIcon src={homeUrl} alt="home" />
+          <HomeIcon src={homeUrl} alt="home" onClick={() => navigate("/")} />
         </HeaderRight>
       </HeaderContainer>
     </div>

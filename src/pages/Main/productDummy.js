@@ -4,7 +4,7 @@ import product3 from "../../assets/images/product3.png";
 import product4 from "../../assets/images/product4.png";
 import product5 from "../../assets/images/product5.png";
 
-export const productDummy = [
+const productDummy = [
     { id: 1, img: product1, name: "아이앱 스튜디오 25 후드 라이트 그레이", price: "145,000원", review: "1,561" },
     { id: 2, img: product2, name: "아이앱 스튜디오 25 후드 라이트 블루", price: "145,000원", review: "1,732" },
     { id: 3, img: product3, name: "아디다스 블랙 져지 2016", price: "255,000원", review: "781" },
