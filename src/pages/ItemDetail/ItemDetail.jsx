@@ -62,7 +62,8 @@ export default function ItemDetail() {
           <Name>{product.name}</Name>
           <StatsRow>
             <StarBox>
-              <img src={starIcon} alt="star" width="13" /> 4.6
+              <img src={starIcon} alt="star" width="13" />
+              <span>{product.rating}</span>
             </StarBox>
             <span>리뷰 {product.review}</span>
           </StatsRow>
