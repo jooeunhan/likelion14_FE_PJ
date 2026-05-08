@@ -2,15 +2,10 @@ import styled from "styled-components";
 
 const Container = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: flex-start;
-`;
-
-const Row = styled.div`
-  display: flex;
+  flex-wrap: wrap;
   gap: 14px;
   justify-content: flex-start;
+  max-width: 280px; 
 `;
 
 const OptionButton = styled.button`
@@ -42,40 +37,15 @@ const OptionButton = styled.button`
 export default function OptionSelector({ options, selectedValue, onSelect }) {
   return (
     <Container>
-      {options.map((item, index) => {
-        if (Array.isArray(item)) {
-          return (
-            <Row key={index}>
-              {item.map((opt) => (
-                <OptionButton
-                  key={opt}
-                  active={selectedValue === opt}
-                  onClick={() => onSelect(opt)}
-                >
-                  {opt}
-                </OptionButton>
-              ))}
-            </Row>
-          );
-        }
-        
-        if (index === 0 && !Array.isArray(options[0])) {
-           return (
-            <Row key="single-row">
-              {options.map((opt) => (
-                <OptionButton
-                  key={opt}
-                  active={selectedValue === opt}
-                  onClick={() => onSelect(opt)}
-                >
-                  {opt}
-                </OptionButton>
-              ))}
-            </Row>
-           )
-        }
-        return null;
-      })}
+      {options.map((opt) => (
+        <OptionButton
+          key={opt}
+          active={selectedValue === opt}
+          onClick={() => onSelect(opt)}
+        >
+          {opt}
+        </OptionButton>
+      ))}
     </Container>
   );
 }
