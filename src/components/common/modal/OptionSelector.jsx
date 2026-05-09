@@ -9,7 +9,7 @@ const Container = styled.div`
 `;
 
 const OptionButton = styled.button`
-  background-color: ${(props) => (props.active ? "#e0e0e0" : "#f2f2f2")};
+  background-color: ${(props) => (props.$active ? "#e0e0e0" : "#f2f2f2")};
   border: none;
   border-radius: 20px;
   
@@ -23,8 +23,8 @@ const OptionButton = styled.button`
   
   font-family: 'Pretendard';
   font-size: 14px;
-  color: ${(props) => (props.active ? "#000000" : "#616161")};
-  font-weight: ${(props) => (props.active ? "700" : "400")};
+  color: ${(props) => (props.$active ? "#000000" : "#616161")};
+  font-weight: ${(props) => (props.$active ? "700" : "400")};
   
   white-space: nowrap;
   box-sizing: border-box;
@@ -40,7 +40,7 @@ export default function OptionSelector({ options, selectedValue, onSelect }) {
       {options.map((opt) => (
         <OptionButton
           key={opt}
-          active={selectedValue === opt}
+          $active={selectedValue === opt}
           onClick={() => onSelect(opt)}
         >
           {opt}

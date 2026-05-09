@@ -50,7 +50,7 @@ const MenuItem = styled.div`
   align-items: center;
   padding: 0 16px; /* 좌우 패딩 */
   font-size: 14px;
-  color: ${(props) => (props.active ? "#000" : "#AFAFAF")};
+  color: ${(props) => (props.$active ? "#000" : "#AFAFAF")};
   font-weight: 400;
   cursor: pointer;
 `;
@@ -71,7 +71,7 @@ export default function SortDropdown({ onSortChange, currentSort }) {
           {options.map((option) => (
             <MenuItem
               key={option}
-              active={currentSort === option}
+              $active={currentSort === option}
               onClick={(e) => {
                 e.stopPropagation();
                 onSortChange(option);

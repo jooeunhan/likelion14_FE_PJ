@@ -44,7 +44,7 @@ const ActionButton = styled.button`
   height: 30px;
   border-radius: 5px;
   border: none;
-  background-color: ${props => props.primary ? "#F2F2F2" : "#D0D0D0"};
+  background-color: ${props => props.$primary ? "#F2F2F2" : "#D0D0D0"};
   color: #333;
   cursor: pointer;
   font-size: 12px;
@@ -63,7 +63,7 @@ export default function DeleteModal({ onConfirm, onCancel }) {
       <ModalContainer onClick={(e) => e.stopPropagation()}>
         <Message>상품을 삭제하시겠습니까?</Message>
         <ButtonGroup>
-          <ActionButton primary onClick={onConfirm}>확인</ActionButton>
+          <ActionButton $primary onClick={onConfirm}>확인</ActionButton>
           <ActionButton onClick={onCancel}>취소</ActionButton>
         </ButtonGroup>
       </ModalContainer>
