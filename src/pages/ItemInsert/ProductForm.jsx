@@ -234,13 +234,13 @@ const handleInputChange = (e) => {
 
     try {
       if (isUpdate) {
-        await updateItems(initialData.id, payload);
+        await updateItems(payload.type, initialData.id, payload);
         alert("상품이 수정되었습니다!");
       } else {
         await addItems(payload.type, payload);
         alert("상품이 등록되었습니다!");
       }
-      navigate(`/${payload.type}`);
+      navigate(`/`);
     } catch (error) {
       console.error("제출 실패:", error);
       alert("서버 오류가 발생했습니다. 입력값을 확인해주세요.");

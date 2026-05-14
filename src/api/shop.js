@@ -19,7 +19,7 @@ export const getItemDetail = async (type, id) => {
     return res.data;
 }
 
-export const updateItems = async (type, data) => {
-    const res = await api.put(`/${type}`, data);
+export const updateItems = async (type, id, data) => {
+    const res = await api.put(`/${type}/${id}`, data);
     return res.data;
 }
