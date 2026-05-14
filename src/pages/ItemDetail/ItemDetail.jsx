@@ -1,8 +1,9 @@
-import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import productDummy from "../Main/productDummy.js";
 import starIcon from "../../assets/icons/star_icon.svg";
 import ProductLayout from "../../layout/ProductLayout.jsx";
+import { getItemDetail, deleteItem } from "../../api/shop.js";
 
 const ProductImg = styled.img`
   width: 459px;
@@ -46,26 +47,38 @@ const StarBox = styled.div`
 
 export default function ItemDetail() {
   const { id } = useParams();
-  
-  const product = productDummy?.find((item) => String(item.id) === String(id));
+  const navigate = useNavigate();
+  const [item, setItem] = useState(null);
 
-  if (!product) return null;
+  useEffect(() => {
+    const fetchItem = async () => {
+      try {
+        const res = await getItemDetail("clothes", id);
+        setItem(res);
+      } catch (err) {
+        console.error("데이터 로딩 실패:", err);
+      }
+    };
+    fetchItem();
+  }, [id]);
+
+  if (!item) return <div>로딩 중...</div>;
 
   return (
     <ProductLayout
       leftContent={
-        <ProductImg src={product.img} alt={product.name} />
+        <ProductImg src={item.image} alt={item.name} />
       }
       rightContent={
         <>
-          <Price>{product.price}</Price>
-          <Name>{product.name}</Name>
+          <Price>{item.price?.toLocaleString()}원</Price>
+          <Name>{item.name}</Name>
           <StatsRow>
             <StarBox>
               <img src={starIcon} alt="star" width="13" />
-              <span>{product.rating}</span>
+              <span>{item.rating}</span>
             </StarBox>
-            <span>리뷰 {product.review}</span>
+            <span>리뷰 {item.reviews}</span>
           </StatsRow>
         </>
       }

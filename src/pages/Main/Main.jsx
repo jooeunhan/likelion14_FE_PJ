@@ -122,7 +122,7 @@ const ProductItem = ({ itemId, img, name, price, review }) => {
   return (
     <Card onClick={() => navigate(`/item/${itemId}`)}>
       <ImageWrapper>
-        <ProductImage src={img} alt={name} />
+        <ProductImage src={img || "기본 이미지 경로"} alt={name} />
       </ImageWrapper>
 
       <InfoBox>

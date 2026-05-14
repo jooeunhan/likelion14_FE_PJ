@@ -4,6 +4,7 @@ import styled from "styled-components";
 import logoUrl from "../../assets/images/kream_image.png";
 import homeUrl from "../../assets/icons/home_icon.png";
 import { useLocation, useNavigate } from "react-router-dom";
+import { deleteItem } from "../../api/shop";
 
 // 대문자로 시작! -> 대문자를 컴포넌트로 인식
 const LogoImage = styled.img`
@@ -58,13 +59,25 @@ export default function Header() {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const currentId = pathname.split("/")[2];
+
   const isDPageOrEPage = pathname.startsWith("/item/") || pathname.startsWith("/edit/");
 
   const isActive = (path) => pathname === path;
 
-  const handleDelete = () => {
-    setIsModalOpen(false);
-    navigate("/"); // 삭제 후 메인으로 이동
+  const handleDelete = async () => {
+    const currentId = pathname.split("/")[2];
+
+    try {
+      await deleteItem("clothes", currentId);
+
+      alert("삭제되었습니다.");
+      setIsModalOpen(false);
+      navigate("/");
+    } catch (error) {
+      console.error("삭제 실패:", error);
+      alert("삭제 요청 중 오류가 발생했습니다.");
+    }
   };
 
   return (
@@ -78,38 +91,38 @@ export default function Header() {
 
         <HeaderRight>
           {isDPageOrEPage ? (
-          <ButtonGroup>
-            <Button 
-              onClick={() => navigate("/add")} 
+            <ButtonGroup>
+              <Button
+                onClick={() => navigate("/add")}
+                $active={pathname === "/add"}
+              >
+                상품등록
+              </Button>
+              <Button onClick={() => setIsModalOpen(true)}>상품삭제</Button>
+              <Button
+                onClick={() => navigate(`/edit/${pathname.split("/")[2]}`)}
+                $active={pathname.startsWith("/edit/")}
+              >
+                상품수정
+              </Button>
+            </ButtonGroup>
+          ) : (
+            <Button
+              onClick={() => navigate("/add")}
               $active={pathname === "/add"}
             >
               상품등록
             </Button>
-            <Button onClick={() => setIsModalOpen(true)}>상품삭제</Button>
-            <Button 
-              onClick={() => navigate(`/edit/${pathname.split("/")[2]}`)}
-              $active={pathname.startsWith("/edit/")}
-            >
-              상품수정
-            </Button>
-          </ButtonGroup>
-        ) : (
-          <Button 
-            onClick={() => navigate("/add")}
-            $active={pathname === "/add"}
-          >
-            상품등록
-          </Button>
-        )}
+          )}
 
           <HomeIcon src={homeUrl} alt="home" onClick={() => navigate("/")} />
         </HeaderRight>
       </HeaderContainer>
 
       {isModalOpen && (
-        <DeleteModal 
-          onConfirm={handleDelete} 
-          onCancel={() => setIsModalOpen(false)} 
+        <DeleteModal
+          onConfirm={handleDelete}
+          onCancel={() => setIsModalOpen(false)}
         />
       )}
     </div>
